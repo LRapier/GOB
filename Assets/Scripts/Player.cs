@@ -46,54 +46,54 @@ public class Action
 
 public class Player : MonoBehaviour
 {
-    Goal[] mGoals;
-    Action[] mActions;
-    Action mChangeOverTime;
+    Goal[] goals;
+    Action[] actions;
+    Action changeOverTime;
     float ticks = 0f;
     const float TICK_LENGTH = 5.0f;
 
     void Start()
     {
-        mGoals = new Goal[3];
-        mGoals[0] = new Goal("Eat", 4);
-        mGoals[1] = new Goal("Sleep", 3);
-        mGoals[2] = new Goal("Pee", 3);
+        goals = new Goal[3];
+        goals[0] = new Goal("Eat", 4);
+        goals[1] = new Goal("Sleep", 3);
+        goals[2] = new Goal("Pee", 3);
 
-        mActions = new Action[6];
-        mActions[0] = new Action("eat some raw food");
-        mActions[0].targetGoals.Add(new Goal("Eat", -3f));
-        mActions[0].targetGoals.Add(new Goal("Sleep", +2f));
-        mActions[0].targetGoals.Add(new Goal("Pee", +1f));
+        actions = new Action[6];
+        actions[0] = new Action("eat a meal");
+        actions[0].targetGoals.Add(new Goal("Eat", -3f));
+        actions[0].targetGoals.Add(new Goal("Sleep", +2f));
+        actions[0].targetGoals.Add(new Goal("Pee", +1f));
 
-        mActions[1] = new Action("eat a snack");
-        mActions[1].targetGoals.Add(new Goal("Eat", -2f));
-        mActions[1].targetGoals.Add(new Goal("Sleep", -1f));
-        mActions[1].targetGoals.Add(new Goal("Pee", +1f));
+        actions[1] = new Action("eat a snack");
+        actions[1].targetGoals.Add(new Goal("Eat", -2f));
+        actions[1].targetGoals.Add(new Goal("Sleep", -1f));
+        actions[1].targetGoals.Add(new Goal("Pee", +1f));
 
-        mActions[2] = new Action("sleep in the bed");
-        mActions[2].targetGoals.Add(new Goal("Eat", +2f));
-        mActions[2].targetGoals.Add(new Goal("Sleep", -4f));
-        mActions[2].targetGoals.Add(new Goal("Pee", +2f));
+        actions[2] = new Action("sleep in bed");
+        actions[2].targetGoals.Add(new Goal("Eat", +2f));
+        actions[2].targetGoals.Add(new Goal("Sleep", -4f));
+        actions[2].targetGoals.Add(new Goal("Pee", +2f));
 
-        mActions[3] = new Action("sleep on the sofa");
-        mActions[3].targetGoals.Add(new Goal("Eat", +1f));
-        mActions[3].targetGoals.Add(new Goal("Sleep", -2f));
-        mActions[3].targetGoals.Add(new Goal("Pee", +1f));
+        actions[3] = new Action("sleep on the sofa");
+        actions[3].targetGoals.Add(new Goal("Eat", +1f));
+        actions[3].targetGoals.Add(new Goal("Sleep", -2f));
+        actions[3].targetGoals.Add(new Goal("Pee", +1f));
 
-        mActions[4] = new Action("drink a soda");
-        mActions[4].targetGoals.Add(new Goal("Eat", -1f));
-        mActions[4].targetGoals.Add(new Goal("Sleep", -2f));
-        mActions[4].targetGoals.Add(new Goal("Pee", +3f));
+        actions[4] = new Action("drink a soda");
+        actions[4].targetGoals.Add(new Goal("Eat", -1f));
+        actions[4].targetGoals.Add(new Goal("Sleep", -2f));
+        actions[4].targetGoals.Add(new Goal("Pee", +3f));
 
-        mActions[5] = new Action("visit the bathroom");
-        mActions[5].targetGoals.Add(new Goal("Eat", 0f));
-        mActions[5].targetGoals.Add(new Goal("Sleep", 0f));
-        mActions[5].targetGoals.Add(new Goal("Pee", -4f));
+        actions[5] = new Action("go to the bathroom");
+        actions[5].targetGoals.Add(new Goal("Eat", 0f));
+        actions[5].targetGoals.Add(new Goal("Sleep", 0f));
+        actions[5].targetGoals.Add(new Goal("Pee", -4f));
 
-        mChangeOverTime = new Action("tick");
-        mChangeOverTime.targetGoals.Add(new Goal("Eat", +4f));
-        mChangeOverTime.targetGoals.Add(new Goal("Sleep", +1f));
-        mChangeOverTime.targetGoals.Add(new Goal("Pee", +2f));
+        changeOverTime = new Action("tick");
+        changeOverTime.targetGoals.Add(new Goal("Eat", +4f));
+        changeOverTime.targetGoals.Add(new Goal("Sleep", +1f));
+        changeOverTime.targetGoals.Add(new Goal("Pee", +2f));
 
 
         Debug.Log("Starting. One hour passes every " + TICK_LENGTH + " seconds.");
@@ -106,9 +106,9 @@ public class Player : MonoBehaviour
     {
         ticks++;
         Debug.Log("Hours Passed: " + ticks);
-        foreach (Goal goal in mGoals)
+        foreach (Goal goal in goals)
         {
-            goal.value += mChangeOverTime.GetGoalChange(goal);
+            goal.value += changeOverTime.GetGoalChange(goal);
             goal.value = Mathf.Max(goal.value, 0);
         }
     }
@@ -116,7 +116,7 @@ public class Player : MonoBehaviour
     void PrintGoals()
     {
         string goalString = "";
-        foreach (Goal goal in mGoals)
+        foreach (Goal goal in goals)
         {
             goalString += goal.name + ": " + goal.value + "; ";
         }
@@ -129,10 +129,10 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
 
-            Action bestThingToDo = ChooseAction(mActions, mGoals);
-            Debug.Log("I think I will " + bestThingToDo.name);
+            Action bestThingToDo = ChooseAction(actions, goals);
+            Debug.Log("I will " + bestThingToDo.name);
 
-            foreach (Goal goal in mGoals)
+            foreach (Goal goal in goals)
             {
                 goal.value += bestThingToDo.GetGoalChange(goal);
                 goal.value = Mathf.Max(goal.value, 0);
@@ -185,7 +185,7 @@ public class Player : MonoBehaviour
     float CurrentDiscontentment()
     {
         float total = 0f;
-        foreach (Goal goal in mGoals)
+        foreach (Goal goal in goals)
         {
             total += (goal.value * goal.value);
         }
